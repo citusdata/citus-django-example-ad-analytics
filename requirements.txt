@@ -1,0 +1,4 @@
+Django==2.1.7
+psycopg2
+django-multitenant
+Pillow
