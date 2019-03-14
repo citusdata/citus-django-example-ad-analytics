@@ -1,0 +1,34 @@
+{% load static from staticfiles %}
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Citus Ad Analytics - {% block title %}{% endblock %}</title>
+
+  <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
+  {% block extend_css %} {% endblock %}
+  {% block extend_js %} {% endblock %}
+</head>
+
+<body class="hold-transition skin-black sidebar-mini">
+  <div class="wrapper">
+
+    {% include 'ad_analytics/navigation.html' %}
+    <div class="content-wrapper">
+      <section class="content-header">
+        <h1>
+          {% block main_title %}{% endblock %}
+          <small>
+            {% block description %}{% endblock %}
+          </small>
+        </h1>
+      </section>
+
+      <section class="content">
+        {% block main %} {% endblock %}
+      </section>
+    </div>
+    {% include 'ad_analytics/footer.html' %}
+  </div>
+</body>
+</html>

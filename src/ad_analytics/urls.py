@@ -16,6 +16,16 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from ad_analytics.views.authenticate import *
+from ad_analytics.views.campaigns import *
+
 urlpatterns = [
     path('admin/', admin.site.urls),
+
+    path(r'login/', login),
+    path(r'logout/', logout, name='logout'),
+
+    path('campaigns/', CampaignListView.as_view(), name='campaign_list'),  # uses the LoginRequiredMixin
+    path('campaign/<int:pk>/', detail, name='campaign_detail'),  # uses the login_required decorator
+
 ]

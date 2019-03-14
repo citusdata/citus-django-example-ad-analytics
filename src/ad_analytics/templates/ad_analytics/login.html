@@ -1,0 +1,63 @@
+{% extends "ad_analytics/base.html" %}
+
+{% block extend_css %}
+    {{ block.super }}
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+{% endblock %}
+
+{% block title %}
+    Login
+{% endblock %}
+
+{% block main_title %}
+    Login
+{% endblock %}
+
+{% block description %}
+    Connect to your account
+{% endblock %}
+
+
+{% block main %}
+ <main class="login-form">
+        <div class="login-form__content">
+            {% with errors=form.non_field_errors %}
+                {% if errors %}
+                    <div class="login-form__error">{{ errors }}</div>
+                {% endif %}
+            {% endwith %}
+            <div class="login-form__container">
+                <h1 class="login-form__title">Log in</h1>
+                <form method="post" id="submit-form" enctype="multipart/form-data">
+                    {% csrf_token %}
+
+                    {% with field=form.username %}
+                        <div class="login-form__group{% if field.errors %} login-form--error{% endif %}">
+                            {{ field }}
+                            {% if field.errors %}
+                                <div class="login-form__indication login-form__indication--bulls">
+                                    {{ field.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endwith %}
+
+                    {% with field=form.password %}
+                        <div class="login-form__group{% if field.errors %} login-form--error{% endif %}">
+                            <label class="login-form__input">
+                                {{ field }}
+                            </label>
+                            {% if field.errors %}
+                                <div class="login-form__indication login-form__indication--bulls">
+                                    {{ field.errors }}
+                                </div>
+                            {% endif %}
+                        </div>
+                    {% endwith %}
+
+                    <button type="submit" class="login-form__submit" href="#">Submit</button>
+                </form>
+            </div>
+        </div>
+    </main>
+{% endblock %}
