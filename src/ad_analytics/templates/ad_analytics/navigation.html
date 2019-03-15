@@ -1,3 +1,5 @@
+{% load static %}
+
 <header class="main-header">
   <a href="/" class="logo">
     <span class="logo-mini"><b>C</b></span>
@@ -49,7 +51,7 @@
     {% if request.user %}
     <div class="user-panel">
       <div class="pull-left image">
-        <img class="img-circle" src="{{ company.image }}" style="background-color: white"></img>
+        <img class="img-circle" src="{% if company.image %}{{ company.image }}{% else %}{% static 'img/default_avatar.png' %}{% endif %}" style="background-color: white"></img>
       </div>
       <div class="pull-left info">
         <p>{{ company.name }}</p>
@@ -60,7 +62,7 @@
 
     <div class="user-panel">
       <div class="pull-left image">
-        <img class="img-circle" src="https://api.adorable.io/avatars/285/laurence@adorable.io" style="background-color: white"></img>
+        <img class="img-circle" src="{% static 'img/default_avatar.png' %}" style="background-color: white"></img>
       </div>
       <div class="pull-left info">
         <a href="{% url 'login' %}"><i class="fa fa-circle text-success"></i> Log in</a>
@@ -73,7 +75,7 @@
         <li class="header">HEADER</li>
         <li class="active"><a href="/"><i class="fa fa-bullseye"></i> <span>All Campaigns</span></a>
         </li>
-        {% for campaign in company.campaigns %}
+        {% for campaign in campaigns %}
           <li class="treeview">
             <a href="#">
               <i class="fa fa-bar-chart"></i>
@@ -83,7 +85,7 @@
             <ul class="treeview-menu">
               <li><a href="{% url 'campaign_detail' campaign.id %}">Manage Campaign</a></li>
               {% for ad in campaign.ads %}
-                <li><a href="{% url ad_detail' campaign.id ad.id %}">Ad #{{ ad.name|truncatechar:30 }}</a></li>
+                <li><a href="{% url 'campaign_ad_detail' campaign.id ad.id %}">Ad #{{ ad.name|truncatechars:30 }}</a></li>
 
               {% endfor %}
             </ul>

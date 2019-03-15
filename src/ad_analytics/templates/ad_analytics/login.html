@@ -1,8 +1,9 @@
 {% extends "ad_analytics/base.html" %}
+{% load static %}
 
 {% block extend_css %}
     {{ block.super }}
-    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/login.css' %}">
 {% endblock %}
 
 {% block title %}
@@ -27,7 +28,6 @@
                 {% endif %}
             {% endwith %}
             <div class="login-form__container">
-                <h1 class="login-form__title">Log in</h1>
                 <form method="post" id="submit-form" enctype="multipart/form-data">
                     {% csrf_token %}
 
