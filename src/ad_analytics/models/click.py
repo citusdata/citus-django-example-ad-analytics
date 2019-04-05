@@ -8,9 +8,8 @@ from .ads import Ads
 
 class Click(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.TextField()
-    ads = models.ForeignKey(Ads, on_delete=models.CASCADE)
+    ads = models.ForeignKey(Ads, on_delete=models.CASCADE, related_name='clicks')
     site_url = models.TextField()
-    cost_per_click_usd = models.DecimalField(max_digits=20, decimal_places=10)
+    cost_per_click_usd = models.DecimalField(max_digits=20, decimal_places=10, null=True)
     user_data = JSONField(null=True, blank=True)
     user_ip = models.CharField(max_length=124)

@@ -16,8 +16,9 @@ Including another URLconf
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.urls import path
+from django.views.generic.base import RedirectView
 
-from ad_analytics.views.authenticate import *
+
 from ad_analytics.views.campaigns import *
 from ad_analytics.views.ads import *
 
@@ -28,6 +29,7 @@ urlpatterns = [
          name='login'),
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
 
+    path('', RedirectView.as_view(url='campaigns'), name='home'),  # same as campaigns
     path('campaigns/', CampaignListView.as_view(), name='campaign_list'),  # uses the LoginRequiredMixin
     path('campaign/<int:pk>/', detail, name='campaign_detail'),  # uses the login_required decorator
     path('campaign/<int:campaign_id>/ad/<int:pk>/', ad_detail, name='campaign_ad_detail'),  # uses the login_required decorator

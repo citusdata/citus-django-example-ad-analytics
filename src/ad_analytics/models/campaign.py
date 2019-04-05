@@ -22,11 +22,10 @@ class Campaign(models.Model):
     state = models.IntegerField(choices=STATE_CHOICES,
                                 default=NEW)
     monthly_budget = models.IntegerField(null=True)
-    blacklisted_site_urls = ArrayField(models.CharField(max_length=200), blank=True)
+    blacklisted_site_urls = ArrayField(models.CharField(max_length=200), blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(null=True, auto_now=True)
     collaborators = models.ManyToManyField(Employee)
-
 
     @cached_property
     def ctr(self):

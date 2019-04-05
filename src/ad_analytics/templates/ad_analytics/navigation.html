@@ -84,7 +84,7 @@
             </a>
             <ul class="treeview-menu">
               <li><a href="{% url 'campaign_detail' campaign.id %}">Manage Campaign</a></li>
-              {% for ad in campaign.ads %}
+              {% for ad in campaign.ads.all %}
                 <li><a href="{% url 'campaign_ad_detail' campaign.id ad.id %}">Ad #{{ ad.name|truncatechars:30 }}</a></li>
 
               {% endfor %}

@@ -10,7 +10,8 @@ def get_image_path(instance, filename):
 
 class Ads(models.Model):
     name = models.TextField()
-    campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE)
+    campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE,
+                                 related_name='ads')
     image = models.ImageField(upload_to=get_image_path)
     target_url = models.TextField()
     impressions_count = models.BigIntegerField(default=0)
