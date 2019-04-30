@@ -13,7 +13,8 @@ class CampaignListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        return queryset.filter(company=self.request.user.employee.company)
+        return queryset.filter(company=self.request.user.employee.company)\
+                       .prefetch_related('ads')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -31,10 +32,11 @@ class CampaignDetailView(DetailView):
         context = super(CampaignDetailView, self).get_context_data(**kwargs)
         company = self.request.user.employee.company
         context['company'] = company
-        context['campaigns'] = company.campaigns.all()
+        context['campaigns'] = company.campaigns.all().prefetch_related('ads')
 
         campaign = self.get_object()
-        ads = campaign.ads.annotate(clicks_by_ad=Count('clicks')).annotate(impressions_by_ad=Count('impressions')).all()
+        ads = campaign.ads.annotate(clicks_by_ad=Count('clicks'))\
+                          .annotate(impressions_by_ad=Count('impressions')).all()
 
         context['ads'] = ads
 

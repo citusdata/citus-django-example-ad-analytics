@@ -13,3 +13,4 @@ class Click(models.Model):
     cost_per_click_usd = models.DecimalField(max_digits=20, decimal_places=10, null=True)
     user_data = JSONField(null=True, blank=True)
     user_ip = models.CharField(max_length=124)
+    clicked_at = models.DateTimeField(null=True)

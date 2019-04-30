@@ -5,11 +5,14 @@
 <html>
   <head>
     <title>Citus Ad Analytics - {% block title %}{% endblock %}</title>
-    <link rel="stylesheet" type="text/css" href="{% static 'css/admin.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" media="all" href="{% static 'css/min/base.css' %}">
+
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+
+
     <script src="{% static 'js/jquery.js' %}"></script>
     <script src="{% static 'js/jquery-ui.js' %}"></script>
-    <script src="{% static 'js/admin.js' %}"></script>
+    <script src="{% static 'js/min/admin.js' %}"></script>
     {% block extend_css %} {% endblock %}
     {% block extend_js %} {% endblock %}
   </head>
