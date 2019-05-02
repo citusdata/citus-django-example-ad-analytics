@@ -5,3 +5,4 @@ Pillow
 django-debug-toolbar
 djangorestframework
 requests
+locustio
