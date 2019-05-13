@@ -1,0 +1,84 @@
+{% extends "ad_analytics/base.html" %}
+{% load static %}
+
+{% block title %}All Campaigns {% endblock %}
+{% block main_title %}All Campaigns {% endblock %}
+
+
+{% block main %}
+
+  <div class="col-md-12">
+    <div class="box">
+      <div class="box-header with-border">
+        <h3 class="box-title">All Clicks</h3>
+      </div>
+      <div class="box-body">
+        <table class="table table-bordered">
+          <tr class="click">
+              <th>Site URL</th>
+              <th>Cost per click</th>
+              <th>User data</th>
+              <th>User IP</th>
+              <th>Clicked At</th>
+            </tr>
+
+            <tr class="next-click">
+              <th><a id="next" href="/api/clicks">See more clicks</a></th>
+            </tr>
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="col-md-12">
+    <div class="box">
+      <div class="box-header with-border">
+        <h3 class="box-title">All Impressions</h3>
+      </div>
+      <div class="box-body">
+        <table class="table table-bordered">
+          <tr>
+            <th>Site URL</th>
+            <th>Cost per impression</th>
+            <th>User data</th>
+            <th>User IP</th>
+            <th>Seen At</th>
+          </tr>
+        </table>
+      </div>
+
+    </div>
+  </div>
+
+{% endblock %}
+
+
+
+{% block extend_js %}
+ {{ block.super }}
+ <script type="text/javascript">
+
+   $(document).ready(function() {
+     function loadClicks() {
+       $.ajax({
+             url : $('#next').attr("href"),
+             dataType: "json",
+             success : function (data) {
+               $('#next').attr("href", data['next']);
+               $.each(data['results'], function(key,value) {
+                 $('<tr class="click"><td>' + value.site_url + '</td><td>' + value.cost_per_click_usd + '</td><td>' + JSON.stringify(value.user_data) + '</td><td>' + value.user_ip + '</td><td>' + value.clicked_at + '</td></td>').insertAfter($('.click').last());
+               });
+               }
+         });
+       }
+
+       $('#next').click(function(event) {
+         event.preventDefault();
+         loadClicks();
+         event.preventDefault();
+       });
+   });
+ </script>
+
+{% endblock %}

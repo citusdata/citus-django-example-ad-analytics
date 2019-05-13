@@ -1,8 +1,8 @@
 {% extends "ad_analytics/base.html" %}
 {% load static %}
 
-{% block title %}All Campaigns {% endblock %}
-{% block main_title %}All Campaigns {% endblock %}
+{% block title %}Campaign {{ object.name }} {% endblock %}
+{% block main_title %}Campaign {{ object.name }} {% endblock %}
 
 
 {% block main %}
@@ -27,7 +27,7 @@
 
           {% for ad in ads %}
             <tr>
-              <td>{{ ad.name }}</td>
+              <td><a href="{% url 'campaign_ad_detail' ad.campaign_id ad.id %}">{{ ad.name }}</a></td>
               <td>
                 <img width="300" height="50" src="{{ ad.image }}" alt="600x100">
               </td>

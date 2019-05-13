@@ -32,7 +32,7 @@ class AdSerializer(serializers.ModelSerializer):
 
 class ClickSerializer(serializers.ModelSerializer):
     class Meta:
-        fields = ('ads', 'site_url', 'cost_per_click_usd', 'user_ip', 'clicked_at')
+        fields = ('ads', 'site_url', 'cost_per_click_usd', 'user_ip', 'clicked_at', 'user_data')
         model = Click
 
 

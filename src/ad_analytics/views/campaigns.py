@@ -19,6 +19,11 @@ class CampaignListView(LoginRequiredMixin, ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['company'] = self.request.user.employee.company
+
+        for campaign in context['campaigns']:
+            if self.request.user in campaign.collaborators.all():
+                campaign.is_collaborator = True
+
         return context
 
 
