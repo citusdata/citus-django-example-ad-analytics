@@ -25,8 +25,18 @@ class Campaign(models.Model):
     blacklisted_site_urls = ArrayField(models.CharField(max_length=200), blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(null=True, auto_now=True)
-    collaborators = models.ManyToManyField(Employee)
+    collaborators = models.ManyToManyField(Employee, through='CampaignCollaborators')
 
     @cached_property
     def ctr(self):
         return 0
+
+
+class CampaignCollaborators(models.Model):
+    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
+    campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, null=True)
+
+    class Meta:
+        db_table = 'ad_analytics_campaign_collaborators'
+        unique_together=(('company', 'employee', 'campaign'))
