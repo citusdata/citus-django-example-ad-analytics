@@ -35,6 +35,9 @@ class Campaign(models.Model):
 class CampaignCollaborators(models.Model):
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
     campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, related_name='collaborators',
+                                null=True,
+                                on_delete=models.CASCADE)
 
     class Meta:
         db_table = 'ad_analytics_campaign_collaborators'
