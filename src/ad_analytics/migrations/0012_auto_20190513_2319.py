@@ -32,11 +32,6 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name='campaigncollaborators',
-            name='company',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='ad_analytics.Company'),
-        ),
-        migrations.AddField(
-            model_name='campaigncollaborators',
             name='employee',
             field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='ad_analytics.Employee'),
         ),

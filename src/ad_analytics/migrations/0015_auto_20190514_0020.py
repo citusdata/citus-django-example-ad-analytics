@@ -7,7 +7,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('ad_analytics', '0015_primarykey'),
+        ('ad_analytics', '0014_primarykey'),
     ]
 
     operations = [
