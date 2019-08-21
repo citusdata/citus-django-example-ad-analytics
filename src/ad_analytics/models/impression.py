@@ -3,13 +3,17 @@ import uuid
 from django.contrib.postgres.fields import JSONField
 from django.db import models
 
+from django_multitenant.mixins import *
+from django_multitenant.fields import TenantForeignKey
+
 from .ads import Ads
 from .company import Company
+from .base import TenantManager
 
 
-class Impression(models.Model):
+class Impression(TenantModelMixin, models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    ads = models.ForeignKey(Ads, on_delete=models.CASCADE, related_name='impressions')
+    ads = TenantForeignKey(Ads, on_delete=models.CASCADE, related_name='impressions')
     company = models.ForeignKey(Company, related_name='impressions',
                                 null=True,
                                 on_delete=models.CASCADE)
@@ -19,3 +23,6 @@ class Impression(models.Model):
     user_data = JSONField(null=True, blank=True)
     user_ip = models.CharField(max_length=124)
     seen_at = models.DateTimeField()
+
+    tenant_id = 'company_id'
+    objects = TenantManager()

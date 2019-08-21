@@ -2,11 +2,15 @@ from django.contrib.postgres.fields import ArrayField
 from django.db import models
 from django.utils.functional import cached_property
 
+from django_multitenant.mixins import *
+from django_multitenant.fields import TenantForeignKey
+
+from .base import TenantManager
 from .company import Company
 from .employee import Employee
 
 
-class Campaign(models.Model):
+class Campaign(TenantModelMixin, models.Model):
     NEW = 0
     RUNNING = 1
     PAUSED = 2
@@ -27,17 +31,23 @@ class Campaign(models.Model):
     updated_at = models.DateTimeField(null=True, auto_now=True)
     collaborators = models.ManyToManyField(Employee, through='CampaignCollaborators')
 
+    tenant_id = 'company_id'
+    objects = TenantManager()
+
     @cached_property
     def ctr(self):
         return 0
 
 
-class CampaignCollaborators(models.Model):
-    employee = models.ForeignKey(Employee, on_delete=models.CASCADE)
-    campaign = models.ForeignKey(Campaign, on_delete=models.CASCADE)
+class CampaignCollaborators(TenantModelMixin, models.Model):
+    employee = TenantForeignKey(Employee, on_delete=models.CASCADE)
+    campaign = TenantForeignKey(Campaign, on_delete=models.CASCADE)
     company = models.ForeignKey(Company, related_name='collaborators',
                                 null=True,
                                 on_delete=models.CASCADE)
+
+    tenant_id = 'company_id'
+    objects = TenantManager()
 
     class Meta:
         db_table = 'ad_analytics_campaign_collaborators'
