@@ -8,6 +8,25 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
+
+        migrations.RunSQL("""
+        ALTER TABLE ad_analytics_company DROP CONSTRAINT ad_analytics_company_ceo_id_key;
+        """),
+
+        migrations.RunSQL("""
+        CREATE UNIQUE INDEX ad_analytics_company_ceo_id_key ON ad_analytics_company (id, ceo_id);
+        """),
+
+
+        migrations.RunSQL("""
+        ALTER TABLE ad_analytics_employee DROP CONSTRAINT ad_analytics_employee_user_id_key;
+        """),
+
+        migrations.RunSQL("""
+        CREATE UNIQUE INDEX ad_analytics_employee_user_id_key ON ad_analytics_employee (company_id, user_id);
+        """),
+
+
         migrations.RunSQL("""
         ALTER TABLE ad_analytics_campaign_collaborators DROP CONSTRAINT ad_analytics_campaign_co_campaign_id_employee_id_bc477b48_uniq;
         """),
