@@ -5,6 +5,8 @@ from django.views.generic import ListView, DetailView
 
 from ad_analytics.models import Campaign, Ads
 
+from django_multitenant.utils import get_current_tenant
+
 
 class CampaignListView(LoginRequiredMixin, ListView):
     model = Campaign
@@ -13,12 +15,14 @@ class CampaignListView(LoginRequiredMixin, ListView):
 
     def get_queryset(self):
         queryset = super().get_queryset()
-        return queryset.filter(company=self.request.user.employee.company)\
-                       .prefetch_related('ads')
+        company = get_current_tenant()
+        return queryset.filter(company=company)\
+                       .prefetch_related('ads')\
+                       .prefetch_related('collaborators')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['company'] = self.request.user.employee.company
+        context['company'] = get_current_tenant()
 
         for campaign in context['campaigns']:
             if self.request.user in campaign.collaborators.all():
@@ -35,7 +39,7 @@ class CampaignDetailView(DetailView):
 
     def get_context_data(self, **kwargs):
         context = super(CampaignDetailView, self).get_context_data(**kwargs)
-        company = self.request.user.employee.company
+        company = get_current_tenant()
         context['company'] = company
         context['campaigns'] = company.campaigns.all().prefetch_related('ads')
 
