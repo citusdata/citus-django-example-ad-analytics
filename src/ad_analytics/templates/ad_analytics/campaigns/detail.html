@@ -32,9 +32,9 @@
                 <img width="300" height="50" src="{{ ad.image }}" alt="600x100">
               </td>
               <td>{{ ad.target_url }}</td>
-              <td>{{ ad.impressions_by_ad }}</td>
-              <td>{{ ad.clicks_by_ad }}</td>
-              <td>{% widthratio ad.clicks_by_ad ad.impressions_by_ad 100 as width %} {{ width }} </td>
+              <td>{{ ad.impressions_count }}</td>
+              <td>{{ ad.clicks_count }}</td>
+              <td>{% widthratio ad.clicks_count ad.impressions_count 100 as width %} {{ width }} </td>
             </tr>
           {% endfor %}
         </table>

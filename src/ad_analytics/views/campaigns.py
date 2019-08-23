@@ -3,7 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Count
 from django.views.generic import ListView, DetailView
 
-from ad_analytics.models import Campaign
+from ad_analytics.models import Campaign, Ads
 
 
 class CampaignListView(LoginRequiredMixin, ListView):
@@ -40,10 +40,7 @@ class CampaignDetailView(DetailView):
         context['campaigns'] = company.campaigns.all().prefetch_related('ads')
 
         campaign = self.get_object()
-        ads = campaign.ads.annotate(clicks_by_ad=Count('clicks'))\
-                          .annotate(impressions_by_ad=Count('impressions')).all()
-
-        context['ads'] = ads
+        context['ads'] = campaign.ads.all()
 
         return context
 
