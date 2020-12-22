@@ -1,13 +1,33 @@
-dependencies:
-	pip install -r requirements.txt
+PYTHON = $(shell which python3 || which python)
+PIP    = $(shell which pip3 || which pip)
 
+DJANGO_SETTINGS_MODULE = ad_analytics.settings.base
+export DJANGO_SETTINGS_MODULE
+
+PORT = 8080
+HOST = http://web:$(PORT)
+LOCUS_OPTS = --users 100 --spawn-rate 2 --run-time 30s
+
+dependencies:
+	$(PIP) install -r requirements.txt
 
 runserver:
-	DJANGO_SETTINGS_MODULE=ad_analytics.settings.base python manage.py runserver 8080
+	$(PYTHON) manage.py runserver $(PORT)
+
+./benchmarkresult/api/example: scripts/locust/benchmark_api.py
+	locust -f $^ --headless --host=$(HOST) $(LOCUS_OPTS) --csv=$@
+
+locusttests-api: ./benchmarkresult/api/example ;
+
+./benchmarkresult/web/example: scripts/locust/benchmark.py
+	locust -f $^ --headless --host=$(HOST) $(LOCUS_OPTS) --csv=$@
+
+locusttests-web: ./benchmarkresult/web/example ;
+
+locusttests: locusttests-api locusttests-web ;
 
 
-locusttests-api:
-	locust -f scripts/locust/benchmark_api.py --no-web --host=http://127.0.0.1:8080 -c 100 -r 2 -t30s --csv=./benchmarkresult/api/example
 
-locusttests-web:
-	locust -f scripts/locust/benchmark.py --no-web --host=http://127.0.0.1:8080 -c 100 -r 2 -t30s --csv=./benchmarkresult/web/example
+# docker-compose helpers
+
+up:

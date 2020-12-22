@@ -1,8 +1,9 @@
-Django==2.1.7
+#Django==2.1.7
+Django==2.2
 psycopg2
 django-multitenant
 Pillow
 django-debug-toolbar
 djangorestframework
 requests
-locustio
+locust

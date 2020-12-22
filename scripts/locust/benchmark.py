@@ -1,5 +1,5 @@
 import datetime
-from locust import HttpLocust, TaskSet, task
+from locust import HttpUser, TaskSet, task
 
 
 def login(l):
@@ -35,7 +35,7 @@ class UserBehavior(TaskSet):
 
 
 
-class WebsiteUser(HttpLocust):
-    task_set = UserBehavior
+class WebsiteUser(HttpUser):
+    tasks = [UserBehavior]
     min_wait = 5000
     max_wait = 9000
