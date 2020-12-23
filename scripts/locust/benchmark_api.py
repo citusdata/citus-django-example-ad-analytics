@@ -1,5 +1,5 @@
 import datetime
-from locust import HttpLocust, TaskSet, task
+from locust import HttpUser, TaskSet, task
 
 
 def login(l):
@@ -30,7 +30,7 @@ class ApiBehavior(TaskSet):
 
 
 
-class ApiUser(HttpLocust):
-    task_set = ApiBehavior
+class ApiUser(HttpUser):
+    tasks = [ApiBehavior]
     min_wait = 5000
     max_wait = 9000

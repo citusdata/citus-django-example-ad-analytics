@@ -1,0 +1,98 @@
+version: "3.9"  # optional since v1.27.0
+services:
+  monitor:
+    image: citusdata/pg_auto_failover:demo
+    environment:
+      PGDATA: /tmp/pgaf
+    command: pg_autoctl create monitor --ssl-self-signed --auth trust --run
+    expose:
+      - 5432
+    networks:
+      vlan:
+        ipv4_address: 172.54.32.100
+  node1:
+    image: citusdata/pg_auto_failover:demo
+    environment:
+      PGDATA: /tmp/pgaf
+    command: [
+    "pg_autoctl", "create", "postgres",
+    "--ssl-self-signed",
+    "--auth", "trust",
+    "--pg-hba-lan",
+    #"--hostname", "node1",
+    "--hostname", "172.54.32.101",
+    "--username", "ad",
+    "--dbname", "analytics",
+    "--monitor", "postgresql://autoctl_node@monitor/pg_auto_failover",
+    "--run"]
+    expose:
+      - 5432
+    networks:
+      vlan:
+        ipv4_address: 172.54.32.101
+  node2:
+    image: citusdata/pg_auto_failover:demo
+    expose:
+      - 5432
+    environment:
+      PGDATA: /tmp/pgaf
+    command: [
+    "pg_autoctl", "create", "postgres",
+    "--ssl-self-signed",
+    "--auth", "trust",
+    "--pg-hba-lan",
+    #"--hostname", "node2",
+    "--hostname", "172.54.32.102",
+    "--username", "ad",
+    "--dbname", "analytics",
+    "--monitor", "postgresql://autoctl_node@monitor/pg_auto_failover",
+    "--run"]
+    expose:
+      - 5432
+    networks:
+      vlan:
+        ipv4_address: 172.54.32.102
+  node3:
+    image: citusdata/pg_auto_failover:demo
+    environment:
+      PGDATA: /tmp/pgaf
+    command: [
+    "pg_autoctl", "create", "postgres",
+    "--ssl-self-signed",
+    "--auth", "trust",
+    "--pg-hba-lan",
+    #"--hostname", "node3",
+    "--hostname", "172.54.32.103",
+    "--username", "ad",
+    "--dbname", "analytics",
+    "--monitor", "postgresql://autoctl_node@monitor/pg_auto_failover",
+    "--run"]
+    expose:
+      - 5432
+    networks:
+      vlan:
+        ipv4_address: 172.54.32.103
+  web:
+    build: .
+    command: bash -c "sleep 30 && django-admin runserver 0.0.0.0:8080 --noreload"
+    expose:
+      - 8080
+    ports:
+      - "8080:8080"
+    networks:
+      vlan:
+    depends_on:
+      - migration
+      - node1
+  migration:
+    build: .
+    command: bash -c "sleep 30 && django-admin migrate"
+    networks:
+      vlan:
+    depends_on:
+      - node1
+networks:
+  vlan:
+    ipam:
+      config:
+        - subnet: 172.54.32.0/24

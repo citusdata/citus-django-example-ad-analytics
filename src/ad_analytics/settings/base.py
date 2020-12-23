@@ -83,11 +83,16 @@ WSGI_APPLICATION = 'ad_analytics.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'django_app',
-        'USER': 'louisegrandjonc',
+        'NAME': 'analytics',
+        'USER': 'ad',
         'PASSWORD': '',
-        'HOST': '127.0.0.1',
+        'HOST': '172.54.32.101,172.54.32.102,172.54.32.103',
         'PORT': '5432',
+        'OPTIONS': {
+            'application_name': 'analytics',
+            'sslmode': 'require',
+            'target_session_attrs': 'read-write',
+        },
     },
 }
 
