@@ -1,18 +1,18 @@
 PYTHON = $(shell which python3 || which python)
 PIP    = $(shell which pip3 || which pip)
 
-DJANGO_SETTINGS_MODULE = ad_analytics.settings.base
+DJANGO_SETTINGS_MODULE=ad_analytics.settings.base
 export DJANGO_SETTINGS_MODULE
 
-PORT = 8080
-HOST = http://web:$(PORT)
+ADDRPORT = 0.0.0.0:8080
+HOST     = http://$(ADDRPORT)/
 LOCUS_OPTS = --users 100 --spawn-rate 2 --run-time 30s
 
 dependencies:
 	$(PIP) install -r requirements.txt
 
 runserver:
-	$(PYTHON) manage.py runserver $(PORT)
+	$(PYTHON) manage.py runserver $(ADDRPORT)
 
 ./benchmarkresult/api/example: scripts/locust/benchmark_api.py
 	locust -f $^ --headless --host=$(HOST) $(LOCUS_OPTS) --csv=$@
@@ -56,11 +56,24 @@ uri:
 hba:
 	for node in node1 node2 node3; \
 	do \
-		echo 'hostssl analytics ad 172.54.32.0/24 trust' | docker-compose exec -T node1 tee -a /tmp/pgaf/pg_hba.conf  ; \
-		docker-compose exec node1 pg_autoctl reload ; \
+		echo 'hostssl analytics ad 172.54.32.0/24 trust' | docker-compose exec -T $$node tee -a /tmp/pgaf/pg_hba.conf  ; \
+		docker-compose exec $$node pg_autoctl reload ; \
 	done
 
-benchmark:
-	docker-compose run web make bench-api
+psql:
+	docker-compose exec web psql -U ad -d 'postgres://172.54.32.101:5432,172.54.32.102:5432,172.54.32.103:5432/analytics?target_session_attrs=read-write&sslmode=require'
+
+dbshell:
+	docker-compose exec web django-admin dbshell
+
+migrate:
+	docker-compose exec web django-admin migrate
+	docker-compose exec web django-admin showmigrations
+
+failover:
+	docker-compose exec monitor pg_autoctl perform failover
+
+benchmark: hba migrate
+	docker-compose exec web make bench-api
 
 .PHONY: dependencies runserver

@@ -37,3 +37,6 @@ COPY manage.py ./
 COPY benchmarkresult/ ./benchmarkresult/
 COPY ./scripts/ ./scripts/
 COPY ./src/ ./src/
+
+ENV PYTHONPATH /usr/src/citus-django-example-ad-analytics/src
+ENV DJANGO_SETTINGS_MODULE ad_analytics.settings.base
