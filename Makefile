@@ -5,7 +5,7 @@ DJANGO_SETTINGS_MODULE=ad_analytics.settings.base
 export DJANGO_SETTINGS_MODULE
 
 ADDRPORT = 0.0.0.0:8080
-HOST     = http://$(ADDRPORT)/
+HOST     = http://127.0.0.1/
 LOCUS_OPTS = --users 100 --spawn-rate 2 --run-time 30s
 
 dependencies:
@@ -66,14 +66,13 @@ psql:
 dbshell:
 	docker-compose exec web django-admin dbshell
 
-migrate:
+migrate: hba
 	docker-compose exec web django-admin migrate
-	docker-compose exec web django-admin showmigrations
 
 failover:
 	docker-compose exec monitor pg_autoctl perform failover
 
-benchmark: hba migrate
+benchmark:
 	docker-compose exec web make bench-api
 
 .PHONY: dependencies runserver
